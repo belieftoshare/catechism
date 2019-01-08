@@ -1,0 +1,772 @@
+<html>
+<head>
+    <title>兒童專用《簡明要理問答》匹配遊戲</title>
+
+    <style type="text/css">
+	body{
+		width:100%;
+		margin:0px;
+		padding:0px;
+		font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;	/* Font to use */
+	}
+	#heading{
+		height:100px;
+	}
+	
+	#dragScriptContainer{	/* BIG DIV containing HTML needed for the entire script */
+		width:1200px;
+		margin:0 auto;
+		border:1px solid #000;
+		height:14800px;
+	margin-top:20px;
+		padding:3px;
+		-moz-user-select:no;
+	}
+	
+	#questionDiv{	/* Big div for all the questions */
+		float:left;
+		height:100%;
+		width:765px;
+		border:1px solid #000;
+		padding:2px;word-wrap: break-word;
+	}
+	#answerDiv{	/* Big div for all the answers */
+		float:right;
+		height:100%;
+		width:400px;
+		border:1px solid #000;
+		padding:2px;word-wrap: break-word;	
+	}
+	
+
+	#questionDiv div,#answerDiv div,#dragContent div{	/* General rules for small divs - i.e. specific questions and answers */
+		width:380px;
+		height:98px;
+		line-height:20px;		
+		float:left;
+		margin-right:2px;
+		margin-bottom:2px;
+		text-align:center;word-wrap: break-word;
+	}	
+
+	#dragContent div{	/* Drag content div - i.e. specific answers when they are beeing dragged */
+		border:1px solid #000;
+	}
+	
+	#answerDiv .dragDropSmallBox{	/* Small answer divs */
+		border:1px solid #000;
+		cursor:pointer;
+	}
+	
+	#questionDiv .dragDropSmallBox{	/* Small answer divs */
+		border:1px solid #000;
+		cursor:pointer;
+		background-color:#E2EBED; /* Light blue background color */
+	}
+	
+	#questionDiv div div{	/* DIV after it has been dragged from right to left box */
+		margin:0px;
+		border:0px;
+		padding:0px;
+		background-color:#FFF;
+	}
+	#questionDiv .destinationBox{	/* Small empty boxes for the questions - i.e. where answers could be dragged */
+		border:0px;
+		background-color:#DDD;
+		width:378px;
+		height:98px;
+	}
+	#questionDiv .correctAnswer{	/* CSS indicating correct answer */
+		background-color:green;
+		color:#fff;
+		border:1px solid #000;
+	}
+	#questionDiv .wrongAnswer{	/* CSS indicating wrong answer */
+		background-color:red;
+		color:#fff;
+		border:1px solid #000;
+	}
+
+	#dragContent div{
+		background-color:#FFF;
+	}
+
+	#questionDiv .dragContentOver{	/* Mouse over question boxes - i.e. indicating where dragged element will be appended if mouse button is relased */
+		border:1px solid #F00;
+	}
+	
+	#answerDiv.dragContentOver{	/* Mouse over answer box - i.e. indicating where dragged element will be appended if mouse button is relased */
+		border:1px solid #F00;
+	}
+	
+	/* NEVER CHANGE THIS */
+	#dragContent{
+		position:absolute;
+		display:none;
+	}	
+
+        .button {
+           background-color: #4CAF50;
+           border: none;
+           color: white;
+           padding: 15px 32px;
+           text-align: center;
+           text-decoration: none;
+           display: inline-block;
+           font-size: 16px;
+           margin: 4px 2px;
+           cursor: pointer;
+        }
+	
+    </style>
+
+    <script type="text/javascript">
+
+	/************************************************************************************************************
+
+                兒童專用《簡明要理問答》
+序
+ 面對廿一世紀，青少年最需要的是紮實信仰的根基及聖潔道德的操練。如何認識上帝？如何討上帝喜悅？是我們每一位基督徒心底所渴望知道的。而時下我們的年輕人 所接觸的，多屬於感官的刺激；即時之快感。並且在虛擬的現實下，不擇手段以換來的不確實的自我肯定。人的理性需要嚴謹的操練，卻被感官文化所掩蓋了。真理、聖潔何處尋？《簡明要理問答》乃改編自 1647 年出版之《威敏斯特小要理問答》。在十九世紀之歐美教會，《小要理問答》常被用作兒童信仰(學道)班之教材。 其內容主要包括上帝、救贖計劃、主禱文、十戒等重要教義。
+ 2000 年夏，新加坡上帝學院[系統上帝學(一)]部分同學在閱讀此要理問答之後覺其重要性及時代之適切性，逐選擇譯之並插以富東方色彩之漫畫以供亞州教會教育事工之用。此翻譯乃採取意譯原則，附以原著之經文，以饗讀者。
+
+ 林慈信
+ 寫於新加坡上帝學院
+2000 年 8 月 30 曰
+
+
+           Last update : 10:04 PM 7/01/2019
+
+	************************************************************************************************************/
+		
+	var shuffleQuestions = true;	/* Shuffle questions ? */
+	var shuffleAnswers = true;	/* Shuffle answers ? */
+	var lockedAfterDrag = false;	/* Lock items after they have been dragged, i.e. the user get's only one shot for the correct answer */
+	
+	function quizIsFinished()
+	{
+		// This function is called when everything is solved		
+		
+	}
+	
+	
+	/* Don't change anything below here */
+	var dragContentDiv = false;
+	var dragContent = false;
+	
+	var dragSource = false;
+	var dragDropTimer = -1;
+	var destinationObjArray = new Array();
+	var destination = false;
+	var dragSourceParent = false;
+	var dragSourceNextSibling = false;
+	var answerDiv;
+	var questionDiv;	
+	var sourceObjectArray = new Array();
+	var arrayOfEmptyBoxes = new Array();
+	var arrayOfAnswers = new Array();
+	
+	function getTopPos(inputObj)
+	{		
+	  if(!inputObj || !inputObj.offsetTop)return 0;		
+	  var returnValue = inputObj.offsetTop;
+	  while((inputObj = inputObj.offsetParent) != null)returnValue += inputObj.offsetTop;
+	  return returnValue;
+	}
+	
+	function getLeftPos(inputObj)
+	{
+	  if(!inputObj || !inputObj.offsetLeft)return 0;	
+	  var returnValue = inputObj.offsetLeft;
+	  while((inputObj = inputObj.offsetParent) != null)returnValue += inputObj.offsetLeft;
+	  return returnValue;
+	}
+		
+	function cancelEvent()
+	{
+		return false;
+	}
+	
+	function initDragDrop(e)
+	{
+		if(document.all)e = event;
+		if(lockedAfterDrag && this.parentNode.parentNode.id=='questionDiv')return;
+		dragContentDiv.style.left = e.clientX  + Math.max(document.documentElement.scrollLeft,document.body.scrollLeft) + 'px';
+		dragContentDiv.style.top = e.clientY  + Math.max(document.documentElement.scrollTop,document.body.scrollTop) + 'px';
+		dragSource = this;
+		dragSourceParent = this.parentNode;
+		dragSourceNextSibling = false;
+		if(this.nextSibling)dragSourceNextSibling = this.nextSibling;
+		if(!dragSourceNextSibling.tagName)dragSourceNextSibling = dragSourceNextSibling.nextSibling;
+		
+		dragDropTimer=0;
+		timeoutBeforeDrag();
+		
+		return false;
+	}
+	
+	function timeoutBeforeDrag(){
+		if(dragDropTimer>=0 && dragDropTimer<10){
+			dragDropTimer = dragDropTimer +1;
+			setTimeout('timeoutBeforeDrag()',10);
+			return;
+		}
+		if(dragDropTimer>=10){
+			dragContentDiv.style.display='block';
+			dragContentDiv.innerHTML = '';
+			dragContentDiv.appendChild(dragSource);
+		
+			
+		}		
+	}
+	
+	function dragDropMove(e)
+	{
+		if(dragDropTimer<10){
+			return;
+		}
+		
+		if(document.all)e = event;
+		
+		var scrollTop = Math.max(document.documentElement.scrollTop,document.body.scrollTop);
+		var scrollLeft = Math.max(document.documentElement.scrollLeft,document.body.scrollLeft);
+		
+		dragContentDiv.style.left = e.clientX + scrollLeft + 'px';
+		dragContentDiv.style.top = e.clientY + scrollTop + 'px';
+		
+		var dragWidth = dragSource.offsetWidth;
+		var dragHeight = dragSource.offsetHeight;
+		
+
+		var objFound = false;
+		
+		var mouseX = e.clientX + scrollLeft;
+		var mouseY = e.clientY + scrollTop;
+		
+		destination = false;
+		for(var no=0;no<destinationObjArray.length;no++){
+			var left = destinationObjArray[no]['left'];
+			var top = destinationObjArray[no]['top'];
+			var width = destinationObjArray[no]['width'];
+			var height = destinationObjArray[no]['height'];
+			
+			destinationObjArray[no]['obj'].className = 'destinationBox';
+			var subs = destinationObjArray[no]['obj'].getElementsByTagName('DIV');
+			if(!objFound && subs.length==0){
+				if(mouseX < (left/1 + width/1) && (mouseX + dragWidth/1) >left && mouseY < (top/1 + height/1) && (mouseY + dragHeight/1) >top){
+					destinationObjArray[no]['obj'].className='dragContentOver';
+					destination = destinationObjArray[no]['obj'];					
+					objFound = true;
+				}		
+			}	
+		}
+		
+		sourceObjectArray['obj'].className='';
+		
+		if(!objFound){
+			var left = sourceObjectArray['left'];
+			var top = sourceObjectArray['top'];
+			var width = sourceObjectArray['width'];
+			var height = sourceObjectArray['height'];
+						
+			if(mouseX < (left/1 + width/1) && (mouseX + dragWidth/1) >left && mouseY < (top/1 + height/1) && (mouseY + dragHeight/1) >top){
+				destination = sourceObjectArray['obj'];
+				sourceObjectArray['obj'].className='dragContentOver';
+			}
+		}
+		return false;
+	}
+	
+	
+	function dragDropEnd()
+	{
+		if(dragDropTimer<10){
+			dragDropTimer = -1;
+			return;
+		}
+		dragContentDiv.style.display='none';
+		sourceObjectArray['obj'].style.backgroundColor = '#FFF';
+		if(destination){
+			destination.appendChild(dragSource);
+			destination.className='destinationBox';
+			
+			// Check if position is correct, i.e. correct answer to the question
+			
+			if(!destination.id || destination.id!='answerDiv'){
+				var previousEl = dragSource.parentNode.previousSibling;
+				if(!previousEl.tagName)previousEl = previousEl.previousSibling;
+				var numericId = previousEl.id.replace(/[^0-9]/g,'');
+				var numericIdSource = dragSource.id.replace(/[^0-9]/g,'');
+				
+				if(numericId==numericIdSource){
+					dragSource.className='correctAnswer';
+					checkAllAnswers();	
+				}
+				else
+					dragSource.className='wrongAnswer';				
+			}
+			
+			if(destination.id && destination.id=='answerDiv'){
+				dragSource.className='dragDropSmallBox';
+			}
+			
+		}else{
+			if(dragSourceNextSibling)
+				dragSourceNextSibling.parentNode.insertBefore(dragSource,dragSourceNextSibling);
+			else
+				dragSourceParent.appendChild(dragSource);
+		}
+		dragDropTimer = -1;
+		dragSourceNextSibling = false;
+		dragSourceParent = false;
+		destination = false;
+	}
+	
+	function checkAllAnswers()
+	{	
+		for(var no=0;no<arrayOfEmptyBoxes.length;no++){
+			var sub = arrayOfEmptyBoxes[no].getElementsByTagName('DIV');
+			if(sub.length==0)return;
+			
+			if(sub[0].className!='correctAnswer'){
+				return;
+			}	
+			
+		}	
+		
+		quizIsFinished();	
+	}
+	
+
+	
+	function resetPositions()
+	{
+		if(dragDropTimer>=10)return;
+		
+		for(var no=0;no<destinationObjArray.length;no++){
+			if(destinationObjArray[no]['obj']){
+				destinationObjArray[no]['left'] = getLeftPos(destinationObjArray[no]['obj'])
+				destinationObjArray[no]['top'] = getTopPos(destinationObjArray[no]['obj'])	
+			}		
+			
+		}
+		sourceObjectArray['left'] = getLeftPos(answerDiv);
+		sourceObjectArray['top'] = getTopPos(answerDiv);		
+	}
+	
+	
+	function initDragDropScript()
+	{
+		dragContentDiv = document.getElementById('dragContent');
+		
+		answerDiv = document.getElementById('answerDiv');
+		answerDiv.onselectstart = cancelEvent;
+		var divs = answerDiv.getElementsByTagName('DIV');
+		var answers = new Array();
+		
+		for(var no=0;no<divs.length;no++){
+			if(divs[no].className=='dragDropSmallBox'){
+				divs[no].onmousedown = initDragDrop;
+				answers[answers.length] = divs[no];
+				arrayOfAnswers[arrayOfAnswers.length] = divs[no];
+			}
+			
+		}	
+		
+		if(shuffleAnswers){
+			for(var no=0;no<(answers.length*10);no++){
+				var randomIndex = Math.floor(Math.random() * answers.length);
+				answerDiv.appendChild(answers[randomIndex]);
+			}		
+		}
+		
+		sourceObjectArray['obj'] = answerDiv;
+		sourceObjectArray['left'] = getLeftPos(answerDiv);
+		sourceObjectArray['top'] = getTopPos(answerDiv);
+		sourceObjectArray['width'] = answerDiv.offsetWidth;
+		sourceObjectArray['height'] = answerDiv.offsetHeight;
+		
+		
+		questionDiv = document.getElementById('questionDiv');
+		
+		questionDiv.onselectstart = cancelEvent;
+		var divs = questionDiv.getElementsByTagName('DIV');
+		
+		var questions = new Array();
+		var questionsOpenBoxes = new Array();
+		
+
+		for(var no=0;no<divs.length;no++){
+			if(divs[no].className=='destinationBox'){
+				var index = destinationObjArray.length;
+				destinationObjArray[index] = new Array();
+				destinationObjArray[index]['obj'] = divs[no];
+				destinationObjArray[index]['left'] = getLeftPos(divs[no])
+				destinationObjArray[index]['top'] = getTopPos(divs[no])
+				destinationObjArray[index]['width'] = divs[no].offsetWidth;
+				destinationObjArray[index]['height'] = divs[no].offsetHeight;
+				questionsOpenBoxes[questionsOpenBoxes.length] = divs[no];
+				arrayOfEmptyBoxes[arrayOfEmptyBoxes.length] = divs[no];
+			}
+			if(divs[no].className=='dragDropSmallBox'){
+				questions[questions.length] = divs[no];
+			}
+				
+		}
+		
+		if(shuffleQuestions){
+			for(var no=0;no<(questions.length*10);no++){
+				var randomIndex = Math.floor(Math.random() * questions.length);
+
+				questionDiv.appendChild(questions[randomIndex]);			
+				questionDiv.appendChild(questionsOpenBoxes[randomIndex]);		
+				
+				destinationObjArray[destinationObjArray.length] = destinationObjArray[randomIndex];
+				destinationObjArray.splice(randomIndex,1);	
+				
+				questionsOpenBoxes[questionsOpenBoxes.length] = questionsOpenBoxes[randomIndex];
+				questionsOpenBoxes.splice(randomIndex,1);
+				questions[questions.length] = questions[randomIndex];
+				questions.splice(randomIndex,1);	
+				
+				
+			}		
+		}
+		
+		questionDiv.style.visibility = 'visible';
+		answerDiv.style.visibility = 'visible';
+		
+		document.documentElement.onmouseup = dragDropEnd;	
+		document.documentElement.onmousemove = dragDropMove;	
+		setTimeout('resetPositions()',150);
+		window.onresize = resetPositions;
+	}
+
+	/* Reset the form */
+	function dragDropResetForm()
+	{
+		for(var no=0;no<arrayOfAnswers.length;no++){
+			arrayOfAnswers[no].className='dragDropSmallBox'
+			answerDiv.appendChild(arrayOfAnswers[no]);			
+		}	
+	}
+	
+	window.onload = initDragDropScript;
+	
+    </script>
+	
+</head>
+
+<body>
+
+    <div id="dragScriptContainer">
+	<div id="questionDiv">
+<div class="dragDropSmallBox" id="q1">1、是誰創造了你?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q2">2、上帝還創造了什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q3">3、上帝為什麼創造你和世界上所有的一切?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q4">4、你要如何榮耀上帝?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q5">5、你為什麼需要榮耀上帝?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q6">6、是不是有很多的上帝?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q7">7、上帝有幾個位格?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q8">8、祂們是誰?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q9">9、上帝是誰?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q10">10、上帝在哪裏?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q11">11、你可能看見上帝嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q12">12、上帝是不是知道每一件事情?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q13">13、上帝是不是可以做任何的事?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q14">14、你要從哪裏學習去愛和順服上帝?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q15">15、聖經是誰寫的?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q16">16、誰是我們的第一對父母?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q17">17、我們的第一對父母是用什麼造的?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q18">18、除了身體以外，上帝還給了亞當和夏娃什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q19">19、你有沒有一個靈魂和一個身體?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q20">20、你怎麼知道你有靈魂?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q21">21、神給了祂們什麼樣的生命?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q22">22、約是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q23">23、神和亞當立了什麼約?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q24">24、在生命之約中，亞當的責任是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q25">25、神在生命之約中應許了什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q26">26、在生命之約中，上帝的咒詛是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q27">27、亞當有沒有遵守生命之約?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q28">28、罪是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q29">29、『不遵守』是什麼意思?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q30">30、『違背』是什麼意思?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q31">31、我們的第一對父母亞當和夏娃犯了什麼罪?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q32">32、誰引誘祂們犯罪?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q33">33、亞當和夏娃犯罪後發生了什麼事?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q34">34、在生命之約中，亞當是不是只是代表自己與上帝立約?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q35">35、亞當犯罪對世人有什麼影響?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q36">36、我們從亞當所續承的罪叫什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q37">37、人犯罪後會有什麼後果?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q38">38、有沒有人可以帶著原罪去天堂?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q39">39、人心的改變被稱為什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q40">40、誰可以改變罪人的心?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q41">41、有沒有人可以透過『生命之約』得救?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q42">42、人為什麼不可以透過『生命之約』得救?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q43">43、天父與誰訂立了『恩典之約』?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q44">44、耶穌基督代表誰與天父立『恩典之約』?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q45">45、在『恩典之約』中，耶穌基督為祂的選民承擔了什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q46">46、主耶穌基督有沒有犯過罪?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q47">47、上帝的兒子是如何受苦?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q48">48、什麼是『贖罪』?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q49">49、上帝在恩典之約中答應了什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q50">50、『稱義』是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q51">51、『成聖』是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q52">52、基督是為誰順服和受苦?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q53">53、耶穌基督在世界上是如何過生活?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q54">54、耶穌基督是怎麼樣死的?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q55">55、誰會得救?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q56">56、悔改是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q57">57、信靠耶穌是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q58">58、你可以靠自己的力量悔改並信靠耶穌嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q59">59、你要怎麼樣得到聖靈的幫助?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q60">60、耶穌基督死了多久?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q61">61、敬虔的人如何在基督來臨之前獲救?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q62">62、祂們怎樣表現祂們的信心?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q63">63、這些祭物代表什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q64">64、耶穌基督有多少個職分?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q65">65、耶穌的職分是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q66">66、耶穌怎樣執行先知的職分?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q67">67、耶穌怎樣執行祭司的職分?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q68">68、耶穌怎樣執行君王的職分?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q69">69、你為什麼需要耶穌作你的先知?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q70">70、你為什麼需要耶穌作你的祭司?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q71">71、你為什麼需要耶穌作你的君王?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q72">72、上帝在西乃山頒佈了幾條誡命?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q73">73、這十條誡又叫什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q74">74、前四條教導什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q75">75、後六條教導什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q76">76、十誡的中心教訓是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q77">77、誰是你的鄰舍?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q78">78、上帝是否愛那些愛祂又聽祂話的人?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q79">79、上帝是否愛那些不愛祂和不聽從祂話的人?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q80">80、第一條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q81">81、第一條誡命吩咐我們作什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q82">82、第二條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q83">83、第二條誡命吩咐我們作什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q84">84、第三條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q85">85、第三條誡命吩咐我們作什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q86">86、第四條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q87">87、第四條誡命吩咐我們作什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q88">88、那一天是基督徒的安息日?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q89">89、為什麼叫『主日』?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q90">90、我們當如何過安息日?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q91">91、第五條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q92">92、第五條誡命吩咐我們什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q93">93、第六條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q94">94、第六條誡命吩咐我們什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q95">95、第七條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q96">96、第七條誡命吩咐我們什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q97">97、第八條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q98">98、第八條誡命吩咐我們什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q99">99、第九條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q100">100、第九條誡命吩咐什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q101">101、第十條誡命是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q102">102、第十條誡命吩咐我們什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q103">103、有誰能完全的遵守這十條誡命?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q104">104、十誡對我們有什麼用處呢?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q105">105、什麼是禱告?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q106">106、我們要奉誰的名禱告?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q107">107、耶穌基督用什麼來教導我們如何禱告?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q108">108、請說出主禱文。</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q109">109、主禱文裏有幾條的祈求?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q110">110、主禱文第一條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q111">111、我們在主禱文第一條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q112">112、主禱文第二條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q113">113、我們在主禱文第二條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q114">114、主禱文第三條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q115">115、我們在主禱文第三條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q116">116、主禱文第四條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q117">117、我們在主禱文第四條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q118">118、主禱文第五條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q119">119、我們在主禱文第五條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q120">120、主禱文第六條說什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q121">121、我們在主禱文第六條求什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q122">122、我們有幾條聖禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q123">123、哪兩條聖禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q124">124、誰吩咐要行這些聖禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q125">125、為什麼耶穌要我們行這些聖禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q126">126、洗禮的記號是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q127">127、洗禮的意思是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q128">128、我們奉誰的名字洗禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q129">129、誰需要洗禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q130">130、為什麼嬰孩要洗禮?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q131">131、耶穌愛小孩嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q132">132、洗禮後的責任是什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q133">133、什麼是聖餐?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q134">134、吃餅喻表什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q135">135、喝酒喻表什麼?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q136">136、誰可以領受聖餐?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q137">137、耶穌被釘十字架後，祂的身體還留在墳墓裏嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q138">138、現在耶穌在哪裏?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q139">139、耶穌會再來嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q140">140、人死後會怎樣?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q141">141、人死後身體會復活嗎?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q142">142、當審判的日子，惡人將會怎樣?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q143">143、什麼是地獄?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q144">144、義人將會怎樣?</div><div class="destinationBox"></div>
+<div class="dragDropSmallBox" id="q145">145、什麼是天堂?</div><div class="destinationBox"></div>
+	</div>
+	
+	
+	<div id="answerDiv">
+<div class="dragDropSmallBox" id="a1">答：上帝創造了我。 </div>
+<div class="dragDropSmallBox" id="a2">答：上帝也創造了世界上所有的一切。 </div>
+<div class="dragDropSmallBox" id="a3">答：為了要榮耀祂。</div>
+<div class="dragDropSmallBox" id="a4">答：我要愛祂並遵行祂的命令。</div>
+<div class="dragDropSmallBox" id="a5">答：因為上帝創造了我並且時常看顧我。</div>
+<div class="dragDropSmallBox" id="a6">答：只有一位上帝。</div>
+<div class="dragDropSmallBox" id="a7">答：上帝有三個位格。</div>
+<div class="dragDropSmallBox" id="a8">答：聖父、聖子和聖靈。</div>
+<div class="dragDropSmallBox" id="a9">答：上帝是靈，不像人有一個身體。 </div>
+<div class="dragDropSmallBox" id="a10">答：上帝在每一處，祂是無所不在的。</div>
+<div class="dragDropSmallBox" id="a11">答：我不能看見上帝，但是上帝卻隨時看見我們。</div>
+<div class="dragDropSmallBox" id="a12">答：是的，沒有任何事情可以隱瞞上帝。</div>
+<div class="dragDropSmallBox" id="a13">答：是的，上帝可以做祂自己心意中任何的事。</div>
+<div class="dragDropSmallBox" id="a14">答：只有聖經可以教導我們。</div>
+<div class="dragDropSmallBox" id="a15">答：聖經是聖靈教導人寫下來的。</div>
+<div class="dragDropSmallBox" id="a16">答：亞當和夏娃。</div>
+<div class="dragDropSmallBox" id="a17">答：上帝用了泥土創造亞當，又用了亞當的肋骨創造了夏娃。</div>
+<div class="dragDropSmallBox" id="a18">答：上帝給了祂們不會死亡的靈魂。</div>
+<div class="dragDropSmallBox" id="a19">答：是的，我有不會死亡的靈魂。</div>
+<div class="dragDropSmallBox" id="a20">答：是聖經告訴我。</div>
+<div class="dragDropSmallBox" id="a21">答：神給祂們聖潔和喜樂的生命。</div>
+<div class="dragDropSmallBox" id="a22">答：約是兩個或更多的人同意准行的條例。</div>
+<div class="dragDropSmallBox" id="a23">答：生命之約。</div>
+<div class="dragDropSmallBox" id="a24">答：完全的順服神。</div>
+<div class="dragDropSmallBox" id="a25">答：若亞當願意順服神，神答應獎賞亞當生命。</div>
+<div class="dragDropSmallBox" id="a26">答：若亞當不順服上帝，祂的咒詛就是死亡。</div>
+<div class="dragDropSmallBox" id="a27">答：沒有，亞當犯罪違背了上帝。</div>
+<div class="dragDropSmallBox" id="a28">答：凡不遵守或違背上帝的律法的，就是罪。</div>
+<div class="dragDropSmallBox" id="a29">答：『不遵守』就是不按著上帝的吩咐作該作的事。</div>
+<div class="dragDropSmallBox" id="a30">答：『違背』就是做上帝所不允許我們做的事。</div>
+<div class="dragDropSmallBox" id="a31">答：吃了上帝禁止祂們吃的果子。</div>
+<div class="dragDropSmallBox" id="a32">答：魔鬼引誘夏娃，然後夏娃把禁果給亞當吃。</div>
+<div class="dragDropSmallBox" id="a33">答：祂們不再有聖潔和快樂的生命，反而變成有罪和痛苦。</div>
+<div class="dragDropSmallBox" id="a34">答：不是，亞當是代表祂所有的後裔。</div>
+<div class="dragDropSmallBox" id="a35">答：世界上所有的人出生便陷入罪惡和悲慘中。</div>
+<div class="dragDropSmallBox" id="a36">答：原罪。</div>
+<div class="dragDropSmallBox" id="a37">答：人犯罪後會承擔上帝的憤怒和咒詛。</div>
+<div class="dragDropSmallBox" id="a38">答：沒有，人的心必須要改變之後才配去天堂。</div>
+<div class="dragDropSmallBox" id="a39">答：重生。</div>
+<div class="dragDropSmallBox" id="a40">答：唯有聖靈。</div>
+<div class="dragDropSmallBox" id="a41">答：沒有人可以透過『生命之約』得救。</div>
+<div class="dragDropSmallBox" id="a42">答：因為人違背了『生命之約』，並且已被定罪。</div>
+<div class="dragDropSmallBox" id="a43">答：天父與耶穌基督，祂的聖子訂立了『恩典之約』。</div>
+<div class="dragDropSmallBox" id="a44">答：耶穌基督代表祂的選民。</div>
+<div class="dragDropSmallBox" id="a45">答：耶穌基督承擔了人犯罪後所應得的懲罰，並且成全了律法。</div>
+<div class="dragDropSmallBox" id="a46">答：沒有，祂是聖潔，良善和沒有瑕疵的。</div>
+<div class="dragDropSmallBox" id="a47">答：基督，上帝的兒子降生成為人，以人的樣式順服並受苦。</div>
+<div class="dragDropSmallBox" id="a48">答：『贖罪』就是耶穌基督代替罪人在十字架上為我們受苦、死去，以滿足人對上帝的公義的虧欠。</div>
+<div class="dragDropSmallBox" id="a49">答：基督捨命救贖的人，上帝答應稱祂們為義，潔淨祂們，使祂們成聖。</div>
+<div class="dragDropSmallBox" id="a50">答：稱義是上帝赦免罪人，對待祂們好象從沒有犯過罪一樣。</div>
+<div class="dragDropSmallBox" id="a51">答：成聖就是上帝使罪人在心理和品性上成為聖潔。</div>
+<div class="dragDropSmallBox" id="a52">答：為那些天父所賜給祂的人。</div>
+<div class="dragDropSmallBox" id="a53">答：祂在貧窮和痛苦中生活。</div>
+<div class="dragDropSmallBox" id="a54">答：祂痛苦的，羞恥的，在十字架上死去的。</div>
+<div class="dragDropSmallBox" id="a55">答：只有那些認罪悔改，信靠耶穌基督並且願意過聖潔生活的人才能得救。</div>
+<div class="dragDropSmallBox" id="a56">答：悔改就是為罪憂傷，討厭罪惡並且下定決心不要再犯罪。因為罪是上帝不喜歡的。</div>
+<div class="dragDropSmallBox" id="a57">答：信靠耶穌就是為了我們的救贖，單單地倚靠祂。</div>
+<div class="dragDropSmallBox" id="a58">答：不可以，我們必須靠著聖靈的幫助才懂得悔改信靠。</div>
+<div class="dragDropSmallBox" id="a59">答：上帝已經告訴我們要禱告祈求聖靈的幫助。</div>
+<div class="dragDropSmallBox" id="a60">答：2000 年以上。</div>
+<div class="dragDropSmallBox" id="a61">答：透過相信救主必來。</div>
+<div class="dragDropSmallBox" id="a62">答：祂們要在上帝的祭壇上獻祭。</div>
+<div class="dragDropSmallBox" id="a63">答：基督，上帝的羔羊。將要為罪人而死。</div>
+<div class="dragDropSmallBox" id="a64">答：耶穌基督有三個職分。</div>
+<div class="dragDropSmallBox" id="a65">答：耶穌的職分是先知、祭司、君王。</div>
+<div class="dragDropSmallBox" id="a66">答：祂教導我們上帝的旨意。</div>
+<div class="dragDropSmallBox" id="a67">答：祂為我們的罪死，求上帝與人和好。</div>
+<div class="dragDropSmallBox" id="a68">答：祂管治我們並保護我們。</div>
+<div class="dragDropSmallBox" id="a69">答：因為我是無知的。</div>
+<div class="dragDropSmallBox" id="a70">答：因為我們有罪。</div>
+<div class="dragDropSmallBox" id="a71">答：因為我是軟弱和無助的。</div>
+<div class="dragDropSmallBox" id="a72">答：十條誡命。</div>
+<div class="dragDropSmallBox" id="a73">答：十誡。</div>
+<div class="dragDropSmallBox" id="a74">答：我們對上帝的責任。</div>
+<div class="dragDropSmallBox" id="a75">答：我們對人的責任。</div>
+<div class="dragDropSmallBox" id="a76">答：要盡心、盡性、盡意愛主－你的上帝，和愛你的鄰舍如自己。</div>
+<div class="dragDropSmallBox" id="a77">答：所有(與我有接觸)的人。</div>
+<div class="dragDropSmallBox" id="a78">答：上帝愛祂們；上帝說：『我愛那些愛我的人』。</div>
+<div class="dragDropSmallBox" id="a79">答：上帝不愛祂們；上帝每天都在生祂們的氣。</div>
+<div class="dragDropSmallBox" id="a80">答：除我以外，你不可有別的上帝。</div>
+<div class="dragDropSmallBox" id="a81">答：當專一敬拜真上帝。</div>
+<div class="dragDropSmallBox" id="a82">答：不可為自己雕刻偶像，也不可作什麼形象仿佛上天、下地，和地低下、水中的百物。不可跪拜那些像，也不可事奉它，因為我耶和華你的上帝是忌邪的上帝。恨我的，我必追討祂的罪，自父及子，直到三四代；愛我、守我誡命的，我必向祂們發慈愛，直到幹代。</div>
+<div class="dragDropSmallBox" id="a83">答：要我們用正確的方式來敬拜上帝，不可以拜『偶像』。</div>
+<div class="dragDropSmallBox" id="a84">答：不可妄稱耶和華－你上帝的名；因為妄稱耶和華名的，耶和華必不以祂為無罪。</div>
+<div class="dragDropSmallBox" id="a85">答：要尊敬上帝的名，上帝的話語，和祂所作的工作。 </div>
+<div class="dragDropSmallBox" id="a86">答： 當紀念安息日，守為聖日。六日－勞碌作你一切的工，但第七日是向耶和華—你的上帝當守的安息日。這一天你和你的兒女、僕婢、牲畜，並你城裏寄居的客旅，無論 何工都不可做；因為六日之內，耶和華造天、地、海，和其中的萬物，第七日便安息，所以耶和華賜福與安息日，定為聖日。</div>
+<div class="dragDropSmallBox" id="a87">答：守安息日為聖日。</div>
+<div class="dragDropSmallBox" id="a88">答：每七天的第一天，也叫做『主日』。</div>
+<div class="dragDropSmallBox" id="a89">答：因為在主日，耶穌從死裏復活過來。</div>
+<div class="dragDropSmallBox" id="a90">答：當以禱告、讚美，讀上帝的話，聽上帝的話來敬拜上帝，並行善，及幫助有需要的人。</div>
+<div class="dragDropSmallBox" id="a91">答：當孝敬父母，使你的日子在耶和華你上帝所賜你的地上，得以長久。</div>
+<div class="dragDropSmallBox" id="a92">答：要在心裏、言語和行為上聖潔。</div>
+<div class="dragDropSmallBox" id="a93">答：不可殺人。</div>
+<div class="dragDropSmallBox" id="a94">答：要遠離生氣的情緒。</div>
+<div class="dragDropSmallBox" id="a95">答：不可犯姦淫。</div>
+<div class="dragDropSmallBox" id="a96">答：要在心裡、言語和行為上聖潔。</div>
+<div class="dragDropSmallBox" id="a97">答：不可偷竊東西。</div>
+<div class="dragDropSmallBox" id="a98">答：要誠實和勤奮。</div>
+<div class="dragDropSmallBox" id="a99">答：不可撒謊陷害人。</div>
+<div class="dragDropSmallBox" id="a100">答：要說誠實話。</div>
+<div class="dragDropSmallBox" id="a101">答：不可貪戀別人的房屋，不可貪戀別人的妻子，僕婢，牛驢，並祂一切所有的。</div>
+<div class="dragDropSmallBox" id="a102">答：要知足，以感恩接受上帝所賜的。</div>
+<div class="dragDropSmallBox" id="a103">答：自從亞當犯罪墮落後，就沒有任何一個人能完全遵守誡命。</div>
+<div class="dragDropSmallBox" id="a104">答：十誡教導我們人的責任和讓我們知道我們都需要一位元救主。</div>
+<div class="dragDropSmallBox" id="a105">答：禱告是向上帝祈求上帝應許給我們的事。</div>
+<div class="dragDropSmallBox" id="a106">答：我們只能奉耶穌基督的名禱告。</div>
+<div class="dragDropSmallBox" id="a107">答：耶穌基督的主禱文。</div>
+<div class="dragDropSmallBox" id="a108">答：我們在天上的父，願人都尊禰的名為聖。願禰的國降臨，願禰的旨意行在地上，如同行在天上。我們日用的飲食，今日賜給我們。免我們的債，如同我們免了人的債。不叫我們遇見試探，救我們脫離兇惡。因為國度、權柄、榮耀，全是禰的直到永遠。阿們！</div>
+<div class="dragDropSmallBox" id="a109">答：共有六條的祈求。</div>
+<div class="dragDropSmallBox" id="a110">答：願人都尊禰的名為聖。</div>
+<div class="dragDropSmallBox" id="a111">答：我們在每一件事上都能榮耀祂的名。</div>
+<div class="dragDropSmallBox" id="a112">答：願禰的國降臨。</div>
+<div class="dragDropSmallBox" id="a113">答：主的福音被傳致世界各地，並人人都相信福音及遵從上帝的旨意。</div>
+<div class="dragDropSmallBox" id="a114">答：願禰的旨意行在地上如同行在天上。</div>
+<div class="dragDropSmallBox" id="a115">答：我們能事奉祂，如同天上的天使一樣。</div>
+<div class="dragDropSmallBox" id="a116">答：今日的飲食賜給我們。</div>
+<div class="dragDropSmallBox" id="a117">答：求上帝賜我們身體和靈魂所需的一切。</div>
+<div class="dragDropSmallBox" id="a118">答：免我們的債，如同我們免了人的債。</div>
+<div class="dragDropSmallBox" id="a119">答：我們求上帝因基督的緣故，白白的饒恕我們一切的罪，並賜我們能力饒恕人。</div>
+<div class="dragDropSmallBox" id="a120">答：不叫我們遇見試探，救我們脫離那惡者。</div>
+<div class="dragDropSmallBox" id="a121">答：求上帝幫助我們遠離罪惡。</div>
+<div class="dragDropSmallBox" id="a122">答：2 條。</div>
+<div class="dragDropSmallBox" id="a123">答：洗禮和聖餐。</div>
+<div class="dragDropSmallBox" id="a124">答：主耶穌基督。</div>
+<div class="dragDropSmallBox" id="a125">答：主耶穌要把門徒與世界分別出來，還要安慰和加強我們對上帝的信心。</div>
+<div class="dragDropSmallBox" id="a126">答：用水來洗禮。</div>
+<div class="dragDropSmallBox" id="a127">答：藉著基督的寶血，我們的罪得赦免。</div>
+<div class="dragDropSmallBox" id="a128">答：我們奉聖父、聖子和聖靈的名洗禮。</div>
+<div class="dragDropSmallBox" id="a129">答：凡相信上帝的人及祂全家的人。</div>
+<div class="dragDropSmallBox" id="a130">答：因為嬰孩有罪性，所以需要救主。</div>
+<div class="dragDropSmallBox" id="a131">答：耶穌愛小孩；因為耶穌說：『讓小孩到我這裏來，不要禁止祂們；因為在天國的，正是這樣的人。』</div>
+<div class="dragDropSmallBox" id="a132">答：做一個真正跟隨耶穌基督的人。</div>
+<div class="dragDropSmallBox" id="a133">答：聖餐是吃餅和喝酒來紀念耶穌為我們受苦及受死。</div>
+<div class="dragDropSmallBox" id="a134">答：耶穌基督的身體為我們的罪而破碎。</div>
+<div class="dragDropSmallBox" id="a135">答：耶穌基督所流出的寶血，為要拯救我們。</div>
+<div class="dragDropSmallBox" id="a136">答：只有那些已經承認自己有罪，接受基督做祂個人的救主，並且接受洗禮歸入教會的人才可以領受聖餐。</div>
+<div class="dragDropSmallBox" id="a137">答：不；耶穌在死後的第三天，就復活升天了。</div>
+<div class="dragDropSmallBox" id="a138">答：耶穌在天堂，為我們祈禱。</div>
+<div class="dragDropSmallBox" id="a139">答：是的；在末日時，耶穌會再來，審判這個世界。</div>
+<div class="dragDropSmallBox" id="a140">答：我們的身體會變回塵土，靈魂會去到靈界。</div>
+<div class="dragDropSmallBox" id="a141">答：是的；聖經告訴我們：『號角要響，死人要復活』。</div>
+<div class="dragDropSmallBox" id="a142">答：惡人將會被扔進地獄。</div>
+<div class="dragDropSmallBox" id="a143">答：一個可怕和充滿無限痛苦的地方。 </div>
+<div class="dragDropSmallBox" id="a144">答：義人將會被接上天堂。</div>
+<div class="dragDropSmallBox" id="a145">答：一個充滿榮耀和喜樂的地方，在那裏義人將永遠與上帝在一起。</div>
+
+
+
+	</div>
+    </div>
+
+    <div id="dragContent"></div>
+
+    <p align="center">
+        <input type="button" class="button" onclick="dragDropResetForm();return false" value="重新開始">
+    </p>
+
+</body>
+
+</html>
+
