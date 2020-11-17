@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <!--Created	10:15 PM 8/11/2018
-    Last Update	3:36 PM 6/01/2019                                           
+    Last Update	11:24 AM 17/11/2020                                           
     Web Ref.	https://www.ccel.org/contrib/cn/creeds/heidelberg.html       
 		http://www.hsinchureformed.org/Data/Articles/Heidelberg.pdf 
 		https://www.crcna.org/welcome/beliefs/confessions/heidelberg-catechism 
@@ -10,12 +10,22 @@
 
 		https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Colors/Color_picker_tool
 		https://htmlcolorcodes.com/color-names/
+
+		Heidelberg Catechism - Revised Edition, 1907, Central Publishing House Cleveland,O.
+		An aid to Heidelberg Catechism - Rev Otto Thelemann, 1896
+		An aid to Heidelberg Catechism - Rev James I Good,D.D., 1904
+
+
 -->
 
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+
+    body {
+       background-color: #fffae5;
+    }
 
     #lightBlueGrad {
        
@@ -33,6 +43,9 @@
        padding: 15px 20px 15px 20px;
        box-sizing: border-box;
        box-shadow: 3px 3px 2px grey;
+       border-radius: 5px;
+       color: Purple;
+       font-weight: bold;
     }
 
 
@@ -44,8 +57,8 @@
 
     .tooltip .tooltiptext {
        visibility: hidden;
-       width: 200px;
-       background-color: black;
+       width: 230px;
+       background-color: purple;
        color: #fff;
        text-align: left; font-size: 16px;
        border-radius: 6px;
@@ -57,20 +70,23 @@
        /* Position the tooltip */
        position: absolute;
        z-index: 1;
+
+       overflow-y: auto;
+       max-height: 220px;
+
    }
 
-/* add top arrow */
-.tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -8px;
-    border-width: 8px;
-    border-style: solid;
-    border-color: transparent transparent black transparent;
-}
-
+   /* add top arrow */
+   .tooltip .tooltiptext::after {
+       content: "";
+       position: absolute;
+       bottom: 100%;
+       left: 50%;
+       margin-left: -8px;
+       border-width: 8px;
+       border-style: solid;
+       border-color: transparent transparent black transparent;
+   }
 
    .tooltip:hover .tooltiptext {
        visibility: visible;
@@ -80,7 +96,7 @@
     .tooltip .abouttext {
        visibility: hidden;
        width: 460px;
-       background-color: black;
+       background-color: darkGreen;
        color: #fff;
        text-align: left;
        border-radius: 6px;
@@ -89,16 +105,22 @@
        /* Position the tooltip */
        position: absolute;
        z-index: 1;
+
+       /* Add scrollar to the tooltip */
+       overflow-y: auto;
+       max-height: 220px;
    }
 
    .tooltip:hover .abouttext {
        visibility: visible;
    }
 
+
+
    .button {
        background-color: wheat;
        border: none;
-       color: DarkGolderRod;
+       color: SaddleBrown;
        padding: 15px 15px;
        text-align: center;
        text-decoration: none;
@@ -108,7 +130,24 @@
        cursor: pointer;
        width: 99%;
        box-shadow: 3px 3px 2px grey;
+       border-radius: 8px;
    }
+
+   .button:hover 
+   {
+       background-color: #f0ce8e;
+   }
+
+   /* when button is clicked */
+   .button:active, 
+   .button:focus 
+   {
+      outline: none;
+      border: 0.1em solid DarkKhaki; 
+      color: SaddleBrown;
+      font-weight: bold;
+   }
+
 
    .fontsize16 {font-size: 16px; }
 
@@ -117,18 +156,19 @@
    h3 { color: DarkGreen; text-align:center; }
 
 
-a:link, a:visited {
-    background-color: lightcoral;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block; margin-left:5px;
-}
-a:hover, a:active {
-    background-color: indianred;
-}
-
+   a:link, a:visited {
+       background-color: lightcoral;
+       color: white;
+       padding: 10px 20px;
+       text-align: center;
+       text-decoration: none;
+       display: inline-block; margin-left:5px;
+       box-shadow: 1.4px 1.4px 1px grey;
+       border-radius: 5px;
+   }
+   a:hover, a:active {
+       background-color: indianred;
+   }
 
 
 </style>
@@ -220,10 +260,11 @@ Ursunus on the Heidelberg Catechism，Columbus：1852）。《海德堡教理問
 
 <a href="#Bottom" style="float:right">頁面底部</a>
 <!--a href="#q008" style="float:right">Q8</a-->
-<br><h3>主日 一</h3>
 
-<button  class="button"  onclick="myFunction('001')">問題一：你在生與死之中唯一的安慰是什麼？</button>
+<br><br><h3>主日 一</h3>
+
 <a name="q001">
+<button  class="button"  onclick="myFunction('001')">問題一：你在生與死之中唯一的安慰是什麼？</button>
 <div id="myDIV001">
   答：在生和死兩者之中，我的身體、靈魂<div class="tooltip"><sup>1</sup><span class="tooltiptext">林前6：19-20：<br>你們豈不知道你們的身體是聖靈的殿嗎？這聖靈是從上帝而來，住在你們裏面的。而且你們不是屬自己的人，因為你們是重價買來的。所以，要在你們的身體上榮耀上帝。</span></div>都不屬于我自己
 <div class="tooltip"><sup>2</sup><span class="tooltiptext">羅14：7-9：<br>我們沒有一個人為自己而活，也沒有一個人為自己而死。我們若活，是為主而活；我們若死，是為主而死。所以，我們或死或活總是主的人。為此，基督死了，又活了，為要作死人和活人的主。</span></div>
@@ -300,7 +341,7 @@ Ursunus on the Heidelberg Catechism，Columbus：1852）。《海德堡教理問
 
 <br><br><h3>主日 四</h3>
 <a name="q009">
-<button  class="button" onclick="myFunction('009')">問題九：那麼，上帝在衪的律法中要求人行他不能行的事，豈非冤屈人嗎？</button>
+<button  class="button" onclick="myFunction('009')">問題九：那麼，上帝在他的律法中要求人行他不能行的事，豈非冤屈人嗎？</button>
 <div id="myDIV009">
 答：不<div class="tooltip"><sup>1</sup><span class="tooltiptext">傳7：29：<br>你看，我所找到的只有一件，就是上帝造的人是正直的，但他們卻尋出許多詭計。」</span></div>；
 因為上帝造人，叫他本來能行律法<div class="tooltip"><sup>2</sup><span class="tooltiptext">創1：31：<br>上帝看一切所造的，看哪，都非常好。有晚上，有早晨，這是第六日。<br>弗4：24：<br>並且穿上新我；這新我是照著上帝的形像造的，有從真理來的公義和聖潔。</span></div>；
@@ -321,7 +362,7 @@ Ursunus on the Heidelberg Catechism，Columbus：1852）。《海德堡教理問
 <button  class="button" onclick="myFunction('011')">問題十一：上帝不也是慈愛的嗎？</button>
 <div id="myDIV011">
   答：上帝固然是慈愛的<div class="tooltip"><sup>9</sup><span class="tooltiptext">出34：6-7：<br>耶和華在他面前經過，宣告：「耶和華，耶和華，有憐憫，有恩惠的上帝，不輕易發怒，且有豐盛的慈愛和信實，<br>為千代的人存留慈愛，赦免罪孽、過犯和罪惡，萬不以有罪的為無罪，必懲罰人的罪，自父及子，直到三、四代。」<br>詩103：8-9：<br>耶和華有憐憫，有恩惠，不輕易發怒，且有豐盛的慈愛。他不長久責備，也不永遠懷怒。</span></div>，
-但衪同樣也是公義的；因此衪的公義要求<div class="tooltip"><sup>10</sup><span class="tooltiptext">出20：5：<br>不可跪拜那些像，也不可事奉它們，因為我耶和華─你的上帝是忌邪的上帝。恨我的，我必懲罰他們的罪，自父及子，直到三、四代；<br>伯34：10-11：<br>「所以，你們明理的人要聽我，上帝斷不致行惡，全能者斷不致不義。<br>他必按人所做的報應人，使各人照所行的得報。</span></div>
+但他同樣也是公義的；因此他的公義要求<div class="tooltip"><sup>10</sup><span class="tooltiptext">出20：5：<br>不可跪拜那些像，也不可事奉它們，因為我耶和華─你的上帝是忌邪的上帝。恨我的，我必懲罰他們的罪，自父及子，直到三、四代；<br>伯34：10-11：<br>「所以，你們明理的人要聽我，上帝斷不致行惡，全能者斷不致不義。<br>他必按人所做的報應人，使各人照所行的得報。</span></div>
 那干犯了至高上帝之威嚴的罪惡，必須受到極刑<div class="tooltip"><sup>11</sup><span class="tooltiptext">詩5：5-6：<br>狂傲的人不能站在你眼前；凡作惡的，都是你所恨惡的。<br>說謊言的，你必滅絕；好流人血、玩弄詭詐的，都為耶和華所憎惡。</span></div>，
 就是身體和靈魂同樣受到永遠的刑罰<div class="tooltip"><sup>12</sup><span class="tooltiptext">太25：35-46：<br>因為我餓了，你們給我吃；渴了，你們給我喝；我流浪在外，你們留我住；36我赤身露體，你們給我穿；我病了，你們看顧我；我在監獄裏，你們來看我。』37義人就回答：『主啊，我們甚麼時候見你餓了，給你吃；渴了，給你喝？38甚麼時候見你流浪在外，留你住；或是赤身露體，給你穿？39又甚麼時候見你病了，或是在監獄裏，來看你呢？』40王回答他們說：『我實在告訴你們，這些事你們做在我弟兄中一個最小的身上，就是做在我身上了。』41「王又要向那左邊的說：『你們這被詛咒的人，離開我！進入那為魔鬼和他的使者所預備的永火裏去！42因為我餓了，你們沒有給我吃；渴了，你們沒有給我喝；43我流浪在外，你們沒有留我住；我赤身露體，你們沒有給我穿；我病了，我在監獄裏，你們沒有來看顧我。』44他們也要回答：『主啊，我們甚麼時候見你餓了，或渴了，或流浪在外，或赤身露體，或病了，或在監獄裏，沒有伺候你呢？』45王要回答：『我實在告訴你們，這些事你們沒有做在任何一個最小的弟兄身上，就是沒有做在我身上了。』46這些人要往永刑裏去；那些義人要往永生裏去。」</span></div>。
 </div>
@@ -330,15 +371,15 @@ Ursunus on the Heidelberg Catechism，Columbus：1852）。《海德堡教理問
 <h2>第二部 論人的救贖</h2>
 <h3>主日 五</h3>
 <a name="q012">
-<button  class="button" onclick="myFunction('012')">問題十二：既然我們因神公義的審判，應受到今世和永遠的刑罰，那麼我們怎麼才能逃避這刑罰，並且能再次蒙神恩寵呢？</button>
+<button  class="button" onclick="myFunction('012')">問題十二：既然我們因上帝公義的審判，應受到今世和永遠的刑罰，那麼我們怎麼才能逃避這刑罰，並且能再次得蒙上帝恩惠呢？</button>
 
 <div id="myDIV012">
-  答：神要求衪的公義得到滿足<div class="tooltip"><sup>1</sup><span class="tooltiptext">出23：7：<br>當遠離誣告的事。不可殺害無辜和義人，因我必不以惡人為義。<br>羅2：1-11：<br>1所以，你這評斷人的人哪，無論你是誰，都無可推諉。你在甚麼事上評斷人，就在甚麼事上定自己的罪。因你這評斷人的，自己所做的卻和別人一樣。2我們知道這樣做的人，上帝必公平地審判他。3你這個人哪，你評斷做這樣事的人，自己所做的卻和別人一樣，你以為能逃脫上帝的審判嗎？4還是你藐視他豐富的恩慈、寬容、忍耐，不知道他的恩慈是領你悔改嗎？5你竟放任你剛硬不悔改的心，為自己累積憤怒！在憤怒的日子，上帝公義的審判要顯示出來。6他要照各人的行為報應各人。7凡恆心行善，尋求榮耀、尊貴和不能朽壞的，就有永生報償他們；8但是那些自私自利、不順從真理、反順從不義的人，就有惱恨、憤怒報應他們。9他要把患難、困苦加給一切作惡的人，先是猶太人，後是希臘人；10卻把榮耀、尊貴、平安加給一切行善的人，先是猶太人，後是希臘人。11因為上帝不偏待人。</span></div>，
-因此我們必須滿足衪的公義，不是由我們自已達到，就是由別人完成<div class="tooltip"><sup>2</sup><span class="tooltiptext">賽53：11：<br>因自己的勞苦，他必看見光(「光」是根據死海古卷和七十士譯本；原文沒有「光」。)就心滿意足。因自己的認識，我的義僕使許多人得稱為義，他要擔當他們的罪孽。<br>羅8：3-4：<br>3律法既因肉體軟弱而無能為力，上帝就差遣自己的兒子成為罪身的樣子，為了對付罪，在肉體中定了罪，4為要使律法要求的義，實現在我們這不隨從肉體、只隨從聖靈去行的人身上。</span></div>。
+  答：上帝要求他的公義得到滿足<div class="tooltip"><sup>1</sup><span class="tooltiptext">出23：7：<br>當遠離誣告的事。不可殺害無辜和義人，因我必不以惡人為義。<br>羅2：1-11：<br>1所以，你這評斷人的人哪，無論你是誰，都無可推諉。你在甚麼事上評斷人，就在甚麼事上定自己的罪。因你這評斷人的，自己所做的卻和別人一樣。2我們知道這樣做的人，上帝必公平地審判他。3你這個人哪，你評斷做這樣事的人，自己所做的卻和別人一樣，你以為能逃脫上帝的審判嗎？4還是你藐視他豐富的恩慈、寬容、忍耐，不知道他的恩慈是領你悔改嗎？5你竟放任你剛硬不悔改的心，為自己累積憤怒！在憤怒的日子，上帝公義的審判要顯示出來。6他要照各人的行為報應各人。7凡恆心行善，尋求榮耀、尊貴和不能朽壞的，就有永生報償他們；8但是那些自私自利、不順從真理、反順從不義的人，就有惱恨、憤怒報應他們。9他要把患難、困苦加給一切作惡的人，先是猶太人，後是希臘人；10卻把榮耀、尊貴、平安加給一切行善的人，先是猶太人，後是希臘人。11因為上帝不偏待人。</span></div>，
+因此我們必須滿足他的公義，不是由我們自已達到，就是由別人完成<div class="tooltip"><sup>2</sup><span class="tooltiptext">賽53：11：<br>因自己的勞苦，他必看見光(「光」是根據死海古卷和七十士譯本；原文沒有「光」。)就心滿意足。因自己的認識，我的義僕使許多人得稱為義，他要擔當他們的罪孽。<br>羅8：3-4：<br>3律法既因肉體軟弱而無能為力，上帝就差遣自己的兒子成為罪身的樣子，為了對付罪，在肉體中定了罪，4為要使律法要求的義，實現在我們這不隨從肉體、只隨從聖靈去行的人身上。</span></div>。
 </div>
 
 <a name="q013">
-<button  class="button" onclick="myFunction('013')">問題十三：我們自已能夠為自己償還罪債滿足神公義的要求嗎？</button>
+<button  class="button" onclick="myFunction('013')">問題十三：我們自已能夠為自己償還罪債滿足上帝公義的要求嗎？</button>
 <div id="myDIV013">
 答：絕對不能<div class="tooltip"><sup>3</sup><span class="tooltiptext">伯9：2-3：<br>2「我真的知道是這樣，但人在上帝前怎能成為義呢？3人若想要與他爭辯，千次中也不能回答一次。<br>伯15：14-16：<br>14人是甚麼，竟算為潔淨呢？婦人所生的是甚麼，竟算為義呢？15看哪，上帝不信任他的眾聖者；在他眼前，天也不潔淨，16何況那污穢可憎，喝罪孽如水的世人呢！</span></div>；
 相反地，我們天天增添自己的罪咎<div class="tooltip"><sup>4</sup><span class="tooltiptext">太6：12：<br>免我們的債，如同我們免了人的債。<br>羅2：4-5：<br>4還是你藐視他豐富的恩慈、寬容、忍耐，不知道他的恩慈是領你悔改嗎？5你竟放任你剛硬不悔改的心，為自己累積憤怒！在憤怒的日子，上帝公義的審判要顯示出來。</span></div>。
@@ -621,22 +662,93 @@ Ursunus on the Heidelberg Catechism，Columbus：1852）。《海德堡教理問
 <br>10：29：<br>兩隻麻雀不是賣一銅錢嗎？你們的父若不許，一隻也不會掉在地上。
 <br>弗1：11：<br>我們也在他裏面得了基業；這原是那位隨己意行萬事的上帝照著自己的旨意所預定的，
 </span></div>
-。他因著他兒子基督的緣故，作我的上帝和父上帝；我毫無疑惑地相信他必供應我身體和靈魂一切的需要3。此外，在流淚的幽谷，無論他給予我什麼不幸，都會變為對我有益的4；因為他是無所不能的上帝5，所以他能如此行，並且衪既是一位信實的天父，他也願意如此行6。</div>
+。他因著他兒子基督的緣故，作我的上帝和父上帝<div class="tooltip"><sup>3</sup><span class="tooltiptext">約1:12-13：<br>凡接納他的，就是信他名的人，他就賜他們權柄作上帝的兒女。13這些人不是從血生的，不是從情慾生的，也不是從人的意願生的，而是從上帝生的。
+<br>羅8:15-16：<br>你們所領受的不是奴僕的靈，仍舊害怕；所領受的是兒子名分的靈，因此我們呼叫：「阿爸，父！」16聖靈自己與我們的靈一同見證我們是上帝的兒女。
+<br>加4:4-7：<br>等到時候成熟，上帝就差遣他的兒子，為女子所生，且生在律法之下，5為要把律法之下的人贖出來，使我們獲得兒子的名分。6因為你們是兒子，上帝就差他兒子的靈進入我們的心，呼叫：「阿爸，父！」7可見，你不再是奴隸，而是兒子了，既然是兒子，就靠著上帝也成為後嗣了。
+<br>弗1:5：<br>他按著自己旨意所喜悅的，預定我們藉著耶穌基督得兒子的名分
+</span></div>
+；我毫無疑惑地相信他必供應我身體和靈魂一切的需要<div class="tooltip"><sup>4</sup><span class="tooltiptext">詩55:22：<br>你要把你的重擔卸給耶和華，
+他必扶持你，
+他永不叫義人動搖。
+<br>路12:22-31：<br>
+耶穌又對門徒說：「所以，我告訴你們，不要為生命憂慮吃甚麼，為身體憂慮穿甚麼。23因為生命勝於飲食，身體勝於衣裳。24你們想一想烏鴉：牠們既不種也不收，既沒有倉又沒有庫，神尚且養活牠們。你們比飛鳥要貴重得多呢！25你們哪一個能藉著憂慮使壽數多加一刻呢？26這最小的事你們尚且不能做，何必憂慮其餘的事呢？
+27你們想一想百合花是怎麼長起來的：它也不勞動，也不紡線。然而我告訴你們，就是所羅門極榮華的時候，他所穿戴的還不如這些花的一朵呢！28你們這小信的人哪！野地裏的草今天還在，明天就丟在爐裏，神還給它這樣的妝飾，何況你們呢？29你們不要求吃甚麼，喝甚麼，也不要掛慮。30這都是世上的外邦人所求的；你們需要這些東西，你們的父都知道。31你們只要求他的國，這些東西就必加給你們了。
+<br>太6:25-26：<br>所以，我告訴你們，不要為你們的生命憂慮吃甚麼喝甚麼，或為你們的身體憂慮穿甚麼。生命不勝於飲食嗎？身體不勝於衣裳嗎？26你們看一看那天上的飛鳥，也不種也不收，也不在倉裏存糧，你們的天父尚且養活牠們。你們不比飛鳥貴重得多嗎？
+</span></div>
+。此外，在流淚的幽谷，無論他給予我什麼不幸，都會變為對我有益的
+<div class="tooltip"><sup>5</sup><span class="tooltiptext">羅8:28；<br>
+我們知道，萬事都互相效力，叫愛神的人得益處，就是按他旨意被召的人。</span></div>
+；因為他是無所不能的上帝
+<div class="tooltip"><sup>6</sup><span class="tooltiptext">創18:14：<br>
+耶和華豈有難成的事嗎？到了所定的時候，我必回到你這裏。明年這時候，撒拉會生一個兒子。」
+<br>羅8:31-39：<br>
+既是這樣，我們對這些事還要怎麼說呢？上帝若幫助我們，誰能抵擋我們呢？32上帝既不顧惜自己的兒子，為我們眾人捨了他，豈不也把萬物和他一同白白地賜給我們嗎？33誰能控告上帝所揀選的人呢？有上帝稱他們為義了。34誰能定他們的罪呢？有基督耶穌 已經死了，而且復活了，現今在上帝的右邊，也替我們祈求。35誰能使我們與基督的愛隔絕呢？難道是患難嗎？是困苦嗎？是迫害嗎？是飢餓嗎？是赤身露體嗎？是危險嗎？是刀劍嗎？36如經上所記：
+「我們為你的緣故終日被殺；
+人看我們如將宰的羊。」
+37然而，靠著愛我們的主，在這一切的事上，我們已經得勝有餘了。38因為我深信，無論是死，是活，是天使，是掌權的，是有權能的 ，是現在的事，是將來的事，39是高處的，是深處的，是別的受造之物，都不能使我們與上帝的愛隔絕，這愛是在我們的主基督耶穌裏的。
+</span></div>
+，所以他能做這件事情，並且他既是一位信實的天父，他也願意做這件事情
+<div class="tooltip"><sup>7</sup><span class="tooltiptext">太7:9-11；<br>
+你們中間誰有兒子求餅，反給他石頭呢？10求魚，反給他蛇呢？11你們雖然不好，尚且知道拿好東西給兒女，何況你們在天上的父，他豈不更要把好東西賜給求他的人嗎？
+</span></div>
+。</div>
 <br><br>
 
 <h3>主日 十</h3>
 <a name="q027">
-<button  class="button" onclick="myFunction('027')">問題二十七：你所瞭解的上帝的眷顧(護理)是什麼？</button>
+<button  class="button" onclick="myFunction('027')">問題二十七：你從上帝的眷顧(護理)中了解什麼？</button>
 
 <div id="myDIV027">
-答：上帝用無所不能，無所不在的能力1，如同用他的手一樣，仍舊托住天地和萬物2，以致一草一木、天晴下雨、豐收饑荒、食物飲料、健康疾病、富足貧窮3，一切都並非是偶然而生的4，而是出於上帝的手5。</div>
+答：上帝無所不能無所不在的能力，
+<div class="tooltip"><sup>1</sup><span class="tooltiptext">耶23:23-24：<br>我是靠近你們的上帝，不是遙遠的上帝，不是嗎？這是耶和華說的。24人豈能在隱密處藏身，使我看不見他呢？這是耶和華說的。我豈不遍滿天和地嗎？這是耶和華說的。
+<br>徒17:24-28：<br>他是創造宇宙和其中萬物的上帝；他既是天地的主，就不住在人手所造的殿宇裏，25也不用人手去服侍，好像缺少甚麼似的；自己倒將生命、氣息、萬物賜給萬人。26他從一人造出萬族，居住在全地面上，並且預先定準他們的年限和所住的疆界，27為要使他們尋求上帝，或者可以揣摩而找到他，其實他離我們各人不遠。28我們生活、行動、存在都在於他。就如你們的詩人也有人說：『我們也是他所生的。』
+</span></div>
+從而，如同用他的手一樣，仍舊托住天地和萬物
+<div class="tooltip"><sup>2</sup><span class="tooltiptext">希1:3：<br>他是上帝榮耀的光輝，是上帝本體的真像，常用他大能的命令托住萬有。他洗淨了人的罪，就坐在高天至大者的右邊。
+<br>詩103:19：<br>耶和華在天上立定寶座，他的國統管萬有。</span></div>
+，以致一草一木、天晴下雨、豐收饑荒、食物飲料、健康疾病、富足貧窮
+<div class="tooltip"><sup>3</sup><span class="tooltiptext">耶5：24：<br>他們心裏並不說：
+『我們應當敬畏耶和華－我們的上帝；
+他按時賜雨，就是秋雨和春雨，
+又為我們定收割的季節。』
+<br>詩145：15-16：<br>萬有的眼目都仰望你，你按時給他們食物。16你張手，使一切有生命的都隨願飽足。
+<br>徒14：15-17：<br>「諸位，為甚麼做這些事呢？我們也是人，性情和你們一樣。我們傳福音給你們，是要你們離棄這些虛妄的事，歸向那創造天、地、海和其中萬物的永生的上帝。16他在從前的世代，任憑萬國各行其道；17然而他未嘗不為自己留下證據來，就如常行善事，從天降雨，賞賜豐年，使你們飲食飽足，滿心喜樂。」
+<br>約9：1-3：<br>耶穌往前走的時候，看見一個生來就失明的人。2門徒問耶穌：「拉比，這人生來失明，是誰犯了罪？是這人還是他的父母呢？」3耶穌回答：「既不是這人犯了罪，也不是他的父母，而是要在他身上顯出上帝的作為來。
+<br>箴22：2：<br>有錢人與窮乏人相遇，
+他們都為耶和華所造。
+</span></div>
+，一切都並非是偶然而生的
+<div class="tooltip"><sup>4</sup><span class="tooltiptext">箴16:33：<br>人雖可擲籤在膝上，
+定事卻由耶和華。</span></div>
+，而是出於上帝的手
+<div class="tooltip"><sup>5</sup><span class="tooltiptext">太10:29：<br>兩隻麻雀不是賣一銅錢嗎？你們的父若不許，一隻也不會掉在地上。30就是你們的頭髮也都數過了。</span></div>
+。</div>
 
 
 <a name="q028">
 <button  class="button" onclick="myFunction('028')">問題二十八：我們知道上帝創造和眷顧萬物，那對我們有什麼益處？</button>
 
 <div id="myDIV028">
-答：我們可以在患難中忍耐，在富足時感恩，並在信實的天父上帝裏，對將來有足夠的信心；因萬物都在他手中，他若不准許，它們動也不能動，所以沒有什麼能使我們與他的愛隔絕。</div>
+答：我們可以在患難中忍耐<div class="tooltip"><sup>1</sup><span class="tooltiptext">伯1：21-22：<br>說：「我赤身出於母胎，也必赤身歸回；賞賜的是耶和華，收取的也是耶和華。耶和華的名是應當稱頌的。」22在這一切的事上，約伯並沒有犯罪，也不以上帝為狂妄。
+<br>雅1：3：<br>因為知道你們的信心經過考驗，就生忍耐。
+</span></div>
+，在富足時感恩<div class="tooltip"><sup>2</sup><span class="tooltiptext">申8：10：<br>你吃得飽足，要稱頌耶和華─你的上帝，因為他將那美地賜給你。」
+<br>帖前5：18：<br>凡事謝恩，因為這是上帝在基督耶穌裏向你們所定的旨意。
+</span></div>
+，並在信實的天父上帝裏，對將來有足夠的信心；因萬物都在他手中，他若不准許，它們動也不能動
+<div class="tooltip"><sup>3</sup><span class="tooltiptext">伯1：12：<br>耶和華對撒但說：「看哪，凡他所有的都在你手中；只是不可伸手加害於他。」於是撒但從耶和華面前退出去。
+<br>2：6：耶和華對撒但說：「看哪，他在你手中，只要留下他的性命。」
+<br>箴21：1：<br>王的心在耶和華手中像河水，他能使它隨意流轉。
+<br>徒17：24-28：<br>他是創造宇宙和其中萬物的上帝；他既是天地的主，就不住在人手所造的殿宇裏，25也不用人手去服侍，好像缺少甚麼似的；自己倒將生命、氣息、萬物賜給萬人。26他從一人造出萬族，居住在全地面上，並且預先定準他們的年限和所住的疆界，27為要使他們尋求上帝，或者可以揣摩而找到他，其實他離我們各人不遠。28我們生活、行動、存在都在於他。就如你們的詩人也有人說：『我們也是他所生的。』
+</span></div>
+，所以沒有什麼能使我們與他的愛隔絕
+<div class="tooltip"><sup>4</sup><span class="tooltiptext">詩55：22：<br>你要把你的重擔卸給耶和華，
+他必扶持你，
+他永不叫義人動搖。
+<br>羅5：3-5：<br>不但如此，就是在患難中也是歡歡喜喜的，因為知道患難生忍耐，4忍耐生老練，老練生盼望，5盼望不至於落空，因為上帝的愛，已藉著所賜給我們的聖靈，澆灌在我們心裏。
+<br>8：38-39：因為我深信，無論是死，是活，是天使，是掌權的，是有權能的 ，是現在的事，是將來的事，39是高處的，是深處的，是別的受造之物，都不能使我們與上帝的愛隔絕，這愛是在我們的主基督耶穌裏的。
+</span></div>
+。</div>
 
 <br><br>
 <h2>論聖子上帝</h2>
